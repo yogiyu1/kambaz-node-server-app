@@ -3,6 +3,7 @@ import "dotenv/config";
 import session from "express-session";
 import Lab5 from './Lab5/index.js';
 import cors from 'cors';
+import Hello from './Hello.js';
 import UserRoutes from './Kambaz/Users/routes.js';
 import CourseRoutes from './Kambaz/Courses/routes.js';
 import ModuleRoutes from "./Kambaz/Modules/routes.js";
@@ -30,7 +31,7 @@ const sessionOptions = {
 
 app.use(session(sessionOptions));
 app.use(express.json());
-
+Hello(app) 
 Lab5(app) 
 UserRoutes(app)
 CourseRoutes(app)
