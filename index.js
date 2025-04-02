@@ -7,6 +7,7 @@ import UserRoutes from './Kambaz/Users/routes.js';
 import CourseRoutes from './Kambaz/Courses/routes.js';
 import ModuleRoutes from "./Kambaz/Modules/routes.js";
 import AssignmentRoutes from './Kambaz/Assignment/routes.js';
+import EnrollmentsRoutes from './Kambaz/Enrollments/routes.js';
 const app = express()
 app.use(cors({
     credentials: true,
@@ -35,4 +36,5 @@ UserRoutes(app)
 CourseRoutes(app)
 ModuleRoutes(app);
 AssignmentRoutes(app);
+EnrollmentsRoutes(app);
 app.listen(process.env.PORT || 4000)
