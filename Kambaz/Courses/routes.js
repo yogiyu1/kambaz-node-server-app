@@ -2,6 +2,8 @@ import * as dao from"./dao.js";
 import * as courseDao from "../Courses/dao.js";
 import * as enrollmentsDao from "../Enrollments/dao.js";
 import * as modulesDao from "../Modules/dao.js";
+import * as assignmentDao from "../Assignment/dao.js";
+
 export default function CourseRoutes(app) {
     app.get("/api/courses", (req, res) => {
         const courese = dao.findAllCourses();
@@ -22,6 +24,24 @@ export default function CourseRoutes(app) {
         res.json(courses);
     };
     app.get("/api/users/:userId/courses", findCoursesForEnrolledUser);
+
+    const findUnenrolledCoursesForUser = (req, res) => {
+        let { userId } = req.params;
+        console.log("req", req);
+        if ( userId === "current") {
+            const currentUser = req.session["currentUser"];
+            if (!currentUser) {
+                res.sendStatus(401);
+                return;
+            }
+            userId = currentUser._id;
+        }
+        const courses = courseDao.findUnenrolledCoursesForUser(userId);
+        res.json(courses);
+    };
+    app.get("/api/users/:userId/unenrolledCourses", findUnenrolledCoursesForUser);
+
+    
 
     const createCourse = (req, res) => {
         const currentUser = req.session["currentUser"];
@@ -63,7 +83,8 @@ export default function CourseRoutes(app) {
     
     app.get("/api/courses/:courseId/assignments", (req, res) => {
         const { courseId } = req.params;
-        const assignments = modulesDao.findAssignmentsForCourse(courseId);
+        const assignments = assignmentDao.findAssignmentsForCourse(courseId);
+        
         res.json(assignments);
     });
     
