@@ -12,13 +12,11 @@ export function createAssignment(assignment) {
 }
 
 export function updateAssignment(assignmentId, assignment) {
-    const { assignments } = Database;
-    const assignmentToUpdate = assignments.find((assignment) => assignment._id === assignmentId);
-    Object.assign(assignmentToUpdate, assignment);
-    console.log("assignment after update", assignmentToUpdate);
-    return assignmentToUpdate;
+    console.log("assignmentId", assignmentId);
+    console.log("updateassignment", assignment);
+    return model.updateOne({ _id: assignmentId }, assignment);
 }
 
 export function deleteAssignment(assignmentId) {
-    Database.assignments = Database.assignments.filter((assignment) => assignment._id !== assignmentId);
+    return model.deleteOne({ _id: assignmentId });
 }

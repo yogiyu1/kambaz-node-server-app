@@ -12,20 +12,20 @@ export default function AssignmentRoutes(app) {
     }
     );
 
-    app.put("/api/courses/:courseId/assignment/:assignmentId", (req, res) => {
+    app.put("/api/courses/:courseId/assignment/:assignmentId", async (req, res) => {
         const { courseId, assignmentId} = req.params;
         const assignmentUpdates = req.body;
-        
+        console.log("routes courseId", courseId);
+        console.log("routes assignmentId", assignmentId);
+        console.log("routes assignment updates", assignmentUpdates);
+        const updatedAssignment = await assignmentDao.updateAssignment(assignmentId, assignmentUpdates);
         console.log("assignmentUpdates", courseId, assignmentId, assignmentUpdates);
-        const updatedAssignment = assignmentDao.updateAssignment(assignmentId, assignmentUpdates);
         res.send(updatedAssignment);
         });
 
-    app.delete("/api/courses/:courseId/assignment/:assignmentId", (req, res) => {
-        const { courseId, assignmentId} = req.params;
-        
-        console.log("assignmentDelete", courseId, assignmentId);
-        assignmentDao.deleteAssignment(assignmentId);
+    app.delete("/api/courses/:courseId/assignment/:assignmentId", async (req, res) => {
+        const { assignmentId} = req.params;
+        await assignmentDao.deleteAssignment(assignmentId);
         res.sendStatus(200);
         });
 
