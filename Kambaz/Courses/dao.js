@@ -30,6 +30,7 @@ export function findUnenrolledCoursesForUser(userId) {
   
 export function createCourse(course) {
     const newCourse = { ...course, _id: uuidv4() };
+    enrollmentsDao.enrollUserInCourse(currentUser._id, newCourse._id);
     return model.create(newCourse);
 }
   

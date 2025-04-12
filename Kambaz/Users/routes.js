@@ -1,5 +1,6 @@
-// import e from "express";
 import * as dao from "./dao.js";
+import * as courseDao from "../Courses/dao.js";
+import * as enrollmentsDao from "../Enrollments/dao.js";
 export default function UserRoutes(app) {
   const createUser = async (req, res) => {
     const user = await dao.createUser(req.body);
@@ -81,7 +82,29 @@ export default function UserRoutes(app) {
         }
         res.json(currentUser);
       };
-    
+
+    const findCoursesForUser = async (req, res) => {
+      const currentUser = req.session["currentUser"];
+      console.log("findCoursesForUser currentUser", currentUser);
+      if (!currentUser) {
+        res.sendStatus(401);
+        return;
+      }
+      if (currentUser.role === "ADMIN") {
+        const courses = await courseDao.findAllCourses();
+        res.json(courses);
+        return;
+      }
+      let { uid } = req.params;
+      if (uid === "current") {
+        uid = currentUser._id;
+      }
+      const courses = await enrollmentsDao.findCoursesForUser(uid);
+      console.log("findCoursesForUser courses", courses);
+      res.json(courses);
+    };
+    app.get("/api/users/:uid/courses", findCoursesForUser);
+  
 
     app.post("/api/users", createUser);
     app.get("/api/users", findAllUsers);
