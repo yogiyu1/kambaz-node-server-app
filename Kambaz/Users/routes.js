@@ -1,6 +1,7 @@
 import * as dao from "./dao.js";
 import * as courseDao from "../Courses/dao.js";
 import * as enrollmentsDao from "../Enrollments/dao.js";
+import os from "os";
 export default function UserRoutes(app) {
   const createUser = async (req, res) => {
     const user = await dao.createUser(req.body);
@@ -61,7 +62,15 @@ export default function UserRoutes(app) {
         console.log("req.body:", req.body); 
         const currentUser = await dao.findUserByCredentials(username, password);
         console.log("currentUser:", currentUser);
-        
+        const hostname = os.hostname();
+        const networkInterfaces = os.networkInterfaces();
+        const ipAddresses = Object.values(networkInterfaces)
+          .flat()
+          .filter((iface) => iface && !iface.internal && iface.family === "IPv4")
+          .map((iface) => iface.address);
+
+        console.log("Server Hostname:", hostname);
+        console.log("Server IP Addresses:", ipAddresses);
         if (currentUser) {
           req.session["currentUser"] = currentUser;
           console.log("signin req.session:", req.session);
