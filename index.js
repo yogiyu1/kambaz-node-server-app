@@ -2,6 +2,8 @@ import express from 'express';
 import mongoose from "mongoose";
 import "dotenv/config";
 import session from "express-session";
+import MongoStore from "connect-mongo";
+
 import Lab5 from './Lab5/index.js';
 import cors from 'cors';
 import Hello from './Hello.js';
@@ -23,9 +25,13 @@ const sessionOptions = {
     resave: false,
     saveUninitialized: false,
   };
-  
+
 if (process.env.NODE_ENV !== "development") {
   sessionOptions.proxy = true;
+    sessionOptions.store= MongoStore.create({
+      mongoUrl: process.env.MONGO_CONNECTION_STRING, 
+      collectionName: 'sessions',
+  }),
   sessionOptions.cookie = {
     sameSite: "none",
     secure: true,
