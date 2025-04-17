@@ -1,6 +1,7 @@
 // import Database from "../Database/index.js";
 import model from "./model.js";
 import { v4 as uuidv4 } from "uuid";
+import * as enrollmentsDao from "../Enrollments/dao.js";
 export function findAllCourses() {
   return model.find();
 }
